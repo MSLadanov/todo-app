@@ -1,10 +1,5 @@
 import { useState } from "react";
-
-export interface ITodo {
-  id: number;
-  text: string;
-  completed: boolean;
-}
+import type { ITodo } from "../types/Todo";
 
 export const useTodos = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
