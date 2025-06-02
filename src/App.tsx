@@ -1,35 +1,94 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { useTodos } from "./hooks/useTodos";
+import { TodoList } from "./components/TodoList";
+import { TodoReview } from "./components/TodoReview";
+import {
+  Container,
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Paper,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const {
+    todos,
+    inputValue,
+    setInputValue,
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    clearCompleted,
+    pendingCount,
+    completedCount,
+  } = useTodos();
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      addTodo();
+    }
+  };
+
+  const pendingTodos = todos.filter((todo) => !todo.completed);
+  const completedTodos = todos.filter((todo) => todo.completed);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <Container maxWidth="sm" sx={{ mt: 4 }}>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          Список задач
+        </Typography>
 
-export default App
+        <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Добавить новую задачу..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={handleKeyPress}
+          />
+          <Button
+            variant="contained"
+            onClick={addTodo}
+            disabled={!inputValue.trim()}
+            startIcon={<AddIcon />}
+          >
+            Добавить
+          </Button>
+        </Box>
+
+        <TodoList
+          todos={todos}
+          title="Все задачи"
+          toggleTodo={toggleTodo}
+          deleteTodo={deleteTodo}
+        />
+
+        <TodoList
+          todos={pendingTodos}
+          title="Невыполненные задачи"
+          toggleTodo={toggleTodo}
+          deleteTodo={deleteTodo}
+        />
+
+        <TodoList
+          todos={completedTodos}
+          title="Выполненные задачи"
+          toggleTodo={toggleTodo}
+          deleteTodo={deleteTodo}
+        />
+
+        <TodoReview
+          pendingCount={pendingCount}
+          clearCompleted={clearCompleted}
+          hasCompleted={completedCount > 0}
+        />
+      </Paper>
+    </Container>
+  );
+};
+
+export default App;

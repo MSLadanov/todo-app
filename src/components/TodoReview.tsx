@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Typography, Box } from '@mui/material';
+import React from "react";
+import { Button, Typography, Box } from "@mui/material";
 
 interface TodoStatsProps {
   pendingCount: number;
@@ -13,7 +13,7 @@ export const TodoReview: React.FC<TodoStatsProps> = ({
   hasCompleted,
 }) => {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
       <Typography>
         Осталось задач: <strong>{pendingCount}</strong>
       </Typography>
